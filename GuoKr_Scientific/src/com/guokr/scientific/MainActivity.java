@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.guokr.adapter.MainActivityListViewAdapter;
+import com.guokr.adapter.ArticleListViewAdapter;
 import com.guokr.xml.model.ArticleList;
 import com.guokr.xml.model.ArticleList.Subject;
 import com.guokr.xml.parser.IPullParser;
@@ -98,7 +98,7 @@ public class MainActivity extends Activity {
 				ArticleListPullParser alpp = new ArticleListPullParser();
 				List<ArticleList> articleList_list = alpp.Parse(is);
 
-				MainActivityListViewAdapter adapter = new MainActivityListViewAdapter(
+				ArticleListViewAdapter adapter = new ArticleListViewAdapter(
 						getActivity(), getData(articleList_list));
 				mDrawerListView.setAdapter(adapter);
 			} catch (Exception e) {
