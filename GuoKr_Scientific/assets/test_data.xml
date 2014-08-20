@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <article>
+	    <subjects>
+	        <subject>
+	            <bgcolor>#60baf9</bgcolor>
+	            <text>评论 </text>
+	        </subject> 
+	        <subject>
+	            <bgcolor>#ff9536</bgcolor>
+	            <text>专访</text>
+	        </subject>
+	        <subject>
+	            <bgcolor>#d6d6d6</bgcolor>
+	            <text>传播</text>
+	        </subject>
+	    </subjects>
+	    <title>你长肌肉我放电：发电器官养成指南 </title>
+	    <author>Paradoxian</author>
+	    <time>昨天29:34</time>
+	    <comment>30</comment>
+	    <summary_img>http://img1.guokr.com/image/KS9YFzxrYmqNv3BsGmOt6qAHxvRJlJVu_ODGt5CDvPpKAQAAfQEAAEpQ.jpg</summary_img>
+	    <summary>电鳗、电鳐、电鲶……这些鱼类的亲缘关系并不算很近，但它们都演化出了能够发电的器官。一项最新的研究表明，发电器官并不是从多种途径演化来的。这些发电鱼类都是利用与肌肉相关的基因网络来打造自己的发电器官。		</summary>
+	</article>
+	
+    <article>
+	    <subjects>
+	        <subject>
+	            <bgcolor>#91dbd5</bgcolor>
+	            <text>前沿 </text>
+	        </subject> 
+	        <subject>
+	            <bgcolor>#d6d6d6</bgcolor>
+	            <text>生物</text>
+	        </subject> 
+	    </subjects>
+	    <title>人造气味让昆虫难觅花香 </title>
+	    <author>伏维阁主</author>
+	    <time>昨天14:00</time>
+	    <comment>11</comment>
+	    <summary_img>http://img1.guokr.com/image/ctKKONQV02NA_RjIYnp2P2f-IdOBAzWgkpgW7GDMLftKAQAACAEAAEpQ.jpg</summary_img>
+	    <summary>一项发表在《科学》（Science）上的最新研究指出，如果自然界的气味背景发生变化（例如混入了更多的人造气味），昆虫寻觅目标花朵的能力就会受到影响。
+		</summary>
+	</article>
+	
+    <article>
+	    <subjects>
+	        <subject>
+	            <bgcolor>#88bc00</bgcolor>
+	            <text>速读 </text>
+	        </subject> 
+	        <subject>
+	            <bgcolor>#d6d6d6</bgcolor>
+	            <text>学习</text>
+	        </subject> 
+	    </subjects>
+	    <title>Tor，让你变身互联网“黑影人” </title>
+	    <author>Andy Greenberg</author>
+	    <time>昨天10:19</time>
+	    <comment>37</comment>
+	    <summary_img>http://img1.guokr.com/image/T7aCAyqwhn3qkai3Un4qt2DkrcqMWFj6Dfe2WezuERWQAQAAHAEAAEpQ.jpg</summary_img>
+	    <summary>随着人们对于网络隐私的愈发重视，真正的匿名访问网络正成为越来越多人的一种需求。采用Tor（The Onion Router）技术的一系列软件和服务将允许使用者匿名实现浏览网页、收发电子邮件、传输大文件、即时通讯等功能。
+		</summary>
+	</article>
+</root>
