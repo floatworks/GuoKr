@@ -11,6 +11,7 @@ public class ArticleList {
 	private String comment;
 	private String summary_img;
 	private String summary;
+	private String url;
 
 	public int getId() {
 		return id;
@@ -102,7 +103,15 @@ public class ArticleList {
 
 		public void setBgcolor(String bgcolor) {
 			this.bgcolor = bgcolor;
-		}
-
+		} 
 	}
+ 
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
 }

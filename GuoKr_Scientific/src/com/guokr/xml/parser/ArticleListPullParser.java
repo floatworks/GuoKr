@@ -32,7 +32,7 @@ public class ArticleListPullParser implements IPullParser {
 				break;
 			case XmlPullParser.START_TAG:
 				if (parser.getName().equals("article")) {
-					articleList = new ArticleList(); 
+					articleList = new ArticleList();
 					subjectList = new ArrayList<ArticleList.Subject>();
 				} else if (parser.getName().equals("subject")) {
 					subject = articleList.new Subject();
@@ -60,13 +60,17 @@ public class ArticleListPullParser implements IPullParser {
 				} else if (parser.getName().equals("summary")) {
 					eventType = parser.next();
 					articleList.setSummary(parser.getText());
+				} else if (parser.getName().equals("url")) {
+					eventType = parser.next();
+					articleList.setUrl(parser.getText());
 				}
 				break;
 			case XmlPullParser.END_TAG:
 				if (parser.getName().equals("subject")) {
 					subjectList.add(subject);
 					subject = null;
-				} 
+				}
+
 				if (parser.getName().equals("article")) {
 					articleList.setSubject(subjectList);
 					articleList_list.add(articleList);

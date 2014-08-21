@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.guokr.adapter.ArticleListViewAdapter;
+import com.guokr.adapter.SubjectListViewAdapter;
 import com.guokr.xml.model.ArticleList;
 import com.guokr.xml.model.ArticleList.Subject;
 import com.guokr.xml.parser.IPullParser;
@@ -47,6 +48,7 @@ import android.widget.TextView;
 import android.os.Build;
 
 public class MainActivity extends Activity {
+	public ArticleListViewAdapter articleListViewAdapter = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +81,7 @@ public class MainActivity extends Activity {
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class PlaceholderFragment extends Fragment {
+	public class PlaceholderFragment extends Fragment {
 
 		public PlaceholderFragment() {
 		}
@@ -93,60 +95,39 @@ public class MainActivity extends Activity {
 					.findViewById(R.id.listview_article);
 
 			try {
+				articleListViewAdapter = new ArticleListViewAdapter(
+						getActivity(), null);
 				InputStream is = getActivity().getAssets()
 						.open("test_data.xml");
 				ArticleListPullParser alpp = new ArticleListPullParser();
 				List<ArticleList> articleList_list = alpp.Parse(is);
+				getData(articleList_list);
 
-				ArticleListViewAdapter adapter = new ArticleListViewAdapter(
-						getActivity(), getData(articleList_list));
-				mDrawerListView.setAdapter(adapter);
+				mDrawerListView.setAdapter(articleListViewAdapter);
 			} catch (Exception e) {
 				Log.e("Error", e.getMessage());
 			}
 			return rootView;
 		}
 
-		private List<Map<String, Object>> getData(
-				List<ArticleList> articleList_list) {
-			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-			Map<String, Object> map = null;
-
+		private void getData(List<ArticleList> articleList_list) {
 			for (ArticleList al : articleList_list) {
-				map = new HashMap<String, Object>();
-				map.put("title", al.getTitle());
-				map.put("author", al.getAuthor());
-				map.put("time", al.getTime());
-				map.put("comment", al.getComment());
-				map.put("summary_image", al.getSummary_img());
-				map.put("summary", al.getSummary());
-				map.put("ll_subject", CreateSubject(al.getSubject()));
-				list.add(map);
+				String title = al.getTitle();
+				String author = al.getAuthor();
+				String time = al.getTime();
+				String comment = al.getComment();
+				String summary_image = al.getSummary_img();
+				String summary = al.getSummary();
+				String url = al.getUrl();
+				List<Subject> subjectList = al.getSubject();
+				SubjectListViewAdapter sgva = new SubjectListViewAdapter(
+						getActivity(), null);
+				for (Subject sj : subjectList) {
+					sgva.Add(sj.getText(), sj.getBgcolor());
+				}
+				articleListViewAdapter.Add(title, author, time, comment,
+						summary_image, summary, url, sgva);
 			}
-			return list;
-		}
-
-		private LinearLayout CreateSubject(List<Subject> subjectList) {
-			LinearLayout layout = new LinearLayout(getActivity());
-			layout.setOrientation(LinearLayout.HORIZONTAL);
-
-			LinearLayout.LayoutParams layout_params = new LinearLayout.LayoutParams(
-					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			layout_params.rightMargin = 15;
-
-			for (Subject sj : subjectList) {
-				TextView tv = new TextView(getActivity());
-				tv.setText(sj.getText());
-				tv.setBackgroundColor(Color.parseColor(sj.getBgcolor()));
-				tv.setTextSize(16);
-				tv.setTextColor(0xffffffff);
-				tv.setPadding(20, 0, 20, 0);
-				tv.setLayoutParams(layout_params);
-				tv.setGravity(Gravity.CENTER_VERTICAL);
-				layout.addView(tv);
-				tv.setOnClickListener(new SubjectOnClickListener());
-			}
-			return layout;
 		}
 
 		public class SubjectOnClickListener implements

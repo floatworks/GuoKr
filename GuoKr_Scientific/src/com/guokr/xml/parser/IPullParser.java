@@ -22,5 +22,5 @@ public interface IPullParser {
 	 * @return
 	 * @throws Exception
 	 */
-	public String Serialize(List<ArticleList> list) throws Exception;
+	public String Serialize(List<ArticleList> books) throws Exception;
 }

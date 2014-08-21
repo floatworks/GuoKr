@@ -1,40 +1,45 @@
 package com.guokr.adapter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.guokr.scientific.ArticleActivity;
 import com.guokr.scientific.R;
+import com.guokr.utils.HorizontalListView;
 import com.guokr.utils.ImageLoader;
+import com.guokr.xml.model.ArticleList.Subject;
 
 public class ArticleListViewAdapter extends BaseAdapter {
 
-	private Context mContext = null;
+	private Activity mActivity = null;
 	private LayoutInflater mInflater = null;
 	private List<Map<String, Object>> mData = null;
 	public ImageLoader imageLoader;
 
-	public ArticleListViewAdapter(Context context,
+	public ArticleListViewAdapter(Activity activity,
 			List<Map<String, Object>> data) {
-		this.mInflater = LayoutInflater.from(context);
-		this.mContext = context;
+		this.mInflater = LayoutInflater.from(activity);
+		this.mActivity = activity;
 		this.mData = data;
-		imageLoader = new ImageLoader(context);
-	}
-
-	public ArticleListViewAdapter(LayoutInflater Inflater,
-			List<Map<String, Object>> data) {
-		this.mInflater = Inflater;
-		mData = data;
+		if (data == null)
+			mData = new ArrayList<Map<String, Object>>();
+		imageLoader = new ImageLoader(mActivity);
 	}
 
 	@Override
@@ -60,24 +65,21 @@ public class ArticleListViewAdapter extends BaseAdapter {
 		ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = mInflater.inflate(R.layout.list_item, null);
+			convertView = mInflater.inflate(R.layout.list_article_item, null);
 			holder.title = (TextView) convertView.findViewById(R.id.title);
 			holder.author = (TextView) convertView.findViewById(R.id.author);
 			holder.time = (TextView) convertView.findViewById(R.id.time);
 			holder.comment = (TextView) convertView.findViewById(R.id.comment);
 			holder.summary_image = (ImageView) convertView
-					.findViewById(R.id.summary_image); 
+					.findViewById(R.id.summary_image);
 			holder.summary = (TextView) convertView.findViewById(R.id.summary);
-			holder.ll_item = (LinearLayout) convertView
-					.findViewById(R.id.ll_item);
-			 
+			holder.subject = (HorizontalListView) convertView
+					.findViewById(R.id.gridview_subject);
+
 			holder.author.setOnClickListener(new AuthorOnClickListener());
 			holder.comment.setOnClickListener(new CommentOnClickListener());
-			//holder.summary_image.setOnClickListener(new SummaryOnClickListener());
-			holder.summary.setOnClickListener(new SummaryOnClickListener());
-			
-			convertView.setTag(holder);
 
+			convertView.setTag(holder);
 
 		}
 
@@ -89,19 +91,16 @@ public class ArticleListViewAdapter extends BaseAdapter {
 		holder.author.setText((String) mData.get(position).get("author"));
 		holder.time.setText((String) mData.get(position).get("time"));
 		holder.comment.setText((String) mData.get(position).get("comment"));
-		holder.summary.setText((String) mData.get(position).get("summary")); 
-
+		holder.summary.setText((String) mData.get(position).get("summary"));
+		SubjectListViewAdapter sgva = (SubjectListViewAdapter) mData.get(
+				position).get("subject");
+		holder.subject.setAdapter(sgva);
 		imageLoader.DisplayImage(
 				(String) mData.get(position).get("summary_image"),
 				holder.summary_image);
 
-		holder.ll_item.removeViewAt(0);
-		holder.ll_item.addView(
-				(LinearLayout) mData.get(position).get("ll_subject"), 0,
-				new LinearLayout.LayoutParams(
-						LinearLayout.LayoutParams.WRAP_CONTENT,
-						LinearLayout.LayoutParams.WRAP_CONTENT));
-
+		String url = (String) mData.get(position).get("url");
+		holder.summary.setOnClickListener(new SummaryOnClickListener(url));
 		return convertView;
 	}
 
@@ -112,7 +111,7 @@ public class ArticleListViewAdapter extends BaseAdapter {
 		public TextView comment;
 		public ImageView summary_image;
 		public TextView summary;
-		public LinearLayout ll_item;;
+		public HorizontalListView subject;;
 	}
 
 	public class AuthorOnClickListener implements
@@ -120,7 +119,7 @@ public class ArticleListViewAdapter extends BaseAdapter {
 		@Override
 		public void onClick(View v) {
 			TextView tv = (TextView) v;
-			new AlertDialog.Builder(mContext).setTitle("作者")
+			new AlertDialog.Builder(mActivity).setTitle("作者")
 					.setMessage(tv.getText()).setPositiveButton("确定", null)
 					.show();
 		}
@@ -131,7 +130,7 @@ public class ArticleListViewAdapter extends BaseAdapter {
 		@Override
 		public void onClick(View v) {
 			TextView tv = (TextView) v;
-			new AlertDialog.Builder(mContext).setTitle("评论")
+			new AlertDialog.Builder(mActivity).setTitle("评论")
 					.setMessage(tv.getText()).setPositiveButton("确定", null)
 					.show();
 		}
@@ -139,12 +138,38 @@ public class ArticleListViewAdapter extends BaseAdapter {
 
 	public class SummaryOnClickListener implements
 			android.view.View.OnClickListener {
+		String url;
+
+		public SummaryOnClickListener(String url) {
+			this.url = url;
+		}
+
 		@Override
 		public void onClick(View v) {
 			TextView tv = (TextView) v;
-			new AlertDialog.Builder(mContext).setTitle("文章")
-					.setMessage(tv.getText()).setPositiveButton("确定", null)
-					.show();
+			// new AlertDialog.Builder(mActivity).setTitle("文章")
+			// .setMessage(tv.getText()).setPositiveButton("确定", null)
+			// .show();
+			Intent intent = new Intent(mActivity, ArticleActivity.class);
+			Bundle bundle = new Bundle();
+			bundle.putString("url", url);
+			intent.putExtras(bundle);
+			mActivity.startActivity(intent);
 		}
+	}
+
+	public void Add(String title, String author, String time, String comment,
+			String summary_image, String summary, String url,
+			SubjectListViewAdapter sgva) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("title", title);
+		map.put("author", author);
+		map.put("time", time);
+		map.put("comment", comment);
+		map.put("summary_image", summary_image);
+		map.put("summary", summary);
+		map.put("url", url);
+		map.put("subject", sgva);
+		mData.add(map);
 	}
 }
